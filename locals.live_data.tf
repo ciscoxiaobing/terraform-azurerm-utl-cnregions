@@ -5,18 +5,10 @@ locals {
       display_name       = location.displayName
       geography          = location.metadata.geography
       geography_group    = location.metadata.geographyGroup
-      id                 = location.id
       name               = location.name
       paired_region_name = try(one(location.metadata.pairedRegion).name, null)
       recommended        = location.metadata.regionCategory == "Recommended"
+      zones              = try([for zone in location.availabilityZoneMappings : tonumber(zone.logicalZone)], tolist(null))
     } if location.metadata.regionType == "Physical"
   ] : null
-  live_zonemappings_list = !var.use_cached_data ? tolist(flatten([
-    for resource_type in jsondecode(one(data.azapi_resource_action.compute_provider).output).resourceTypes : [
-      for mapping in resource_type.zoneMappings : [{
-        location = mapping.location
-        zones    = sort([for zone in mapping.zones : tonumber(zone)])
-      }]
-    ] if resource_type.resourceType == "virtualMachines"
-  ])) : null
 }

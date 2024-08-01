@@ -40,7 +40,6 @@ The following resources are used by this module:
 - [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
 - [azapi_client_config.current](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/client_config) (data source)
 - [azapi_client_config.telemetry](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/client_config) (data source)
-- [azapi_resource_action.compute_provider](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource_action) (data source)
 - [azapi_resource_action.locations](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource_action) (data source)
 - [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) (data source)
 
@@ -53,6 +52,14 @@ No required inputs.
 
 The following input variables are optional (have default values):
 
+### <a name="input_availability_zones_filter"></a> [availability\_zones\_filter](#input\_availability\_zones\_filter)
+
+Description: If true, the module will only return regions that have availability zones.
+
+Type: `bool`
+
+Default: `false`
+
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
 Description: This variable controls whether or not telemetry is enabled for the module.  
@@ -63,9 +70,27 @@ Type: `bool`
 
 Default: `true`
 
-### <a name="input_recommended_regions_only"></a> [recommended\_regions\_only](#input\_recommended\_regions\_only)
+### <a name="input_geography_filter"></a> [geography\_filter](#input\_geography\_filter)
 
-Description: If true, the module will only return regions that are have the category set to `Recommended` by the locations API.
+Description: If set, the module will only return regions that match the specified geography.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_geography_group_filter"></a> [geography\_group\_filter](#input\_geography\_group\_filter)
+
+Description: If set, the module will only return regions that match the specified geography group.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_recommended_filter"></a> [recommended\_filter](#input\_recommended\_filter)
+
+Description: If true, the module will only return regions that are have the category set to `Recommended` by the locations API.  
+This is default `true` as several regions are not available for general deployment and must be explicitly made available via support ticket.  
+Enabling these regions by default may lead to deployment failures.
 
 Type: `bool`
 
@@ -91,7 +116,7 @@ The following outputs are exported:
 
 ### <a name="output_regions"></a> [regions](#output\_regions)
 
-Description: A list of region objects. Each region object contains the following attributes:
+Description: A list of region objects subject to the filters supplied by input variables. Each region object contains the following attributes:
 
 - `name` - The name of the region.
 - `display_name` - The display name of the region.
@@ -102,23 +127,35 @@ Description: A list of region objects. Each region object contains the following
 
 ### <a name="output_regions_by_display_name"></a> [regions\_by\_display\_name](#output\_regions\_by\_display\_name)
 
-Description: A map of region display names to region objects. See `regions` output for more details.
+Description: A map of region display names to region objects subject to the filters supplied by input variables. See `regions` output for more details.
 
 ### <a name="output_regions_by_geography"></a> [regions\_by\_geography](#output\_regions\_by\_geography)
 
-Description: A map of geographies to a list of region objects. See `regions` output for more details.
+Description: A map of geographies to a list of region objects subject to the filters supplied by input variables. See `regions` output for more details.
 
 ### <a name="output_regions_by_geography_group"></a> [regions\_by\_geography\_group](#output\_regions\_by\_geography\_group)
 
-Description: A map of geography groups to a list of region objects. See `regions` output for more details.
+Description: A map of geography groups to a list of region objects subject to the filters supplied by input variables. See `regions` output for more details.
 
 ### <a name="output_regions_by_name"></a> [regions\_by\_name](#output\_regions\_by\_name)
 
-Description: A map of region display names to region objects. See `regions` output for more details.
+Description: A map of region display names to region objects subject to the filters supplied by input variables. See `regions` output for more details.
 
 ### <a name="output_regions_by_name_or_display_name"></a> [regions\_by\_name\_or\_display\_name](#output\_regions\_by\_name\_or\_display\_name)
 
-Description: A map of regions by either display names or name, to region objects. See `regions` output for more details.
+Description: A map of regions by either display names or name, to region objects subject to the filters supplied by input variables. See `regions` output for more details.
+
+### <a name="output_valid_region_display_names"></a> [valid\_region\_display\_names](#output\_valid\_region\_display\_names)
+
+Description: A set of valid region display names subject to the filters supplied by input variables.
+
+### <a name="output_valid_region_names"></a> [valid\_region\_names](#output\_valid\_region\_names)
+
+Description: A set of valid region names subject to the filters supplied by input variables.
+
+### <a name="output_valid_region_names_or_display_names"></a> [valid\_region\_names\_or\_display\_names](#output\_valid\_region\_names\_or\_display\_names)
+
+Description: A set of valid region names or display names subject to the filters supplied by input variables.
 
 ## Modules
 

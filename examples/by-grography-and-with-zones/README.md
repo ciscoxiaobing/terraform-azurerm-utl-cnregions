@@ -16,19 +16,15 @@ terraform {
 
 
 module "regions" {
-  source           = "../../"
-  enable_telemetry = var.enable_telemetry
+  source                    = "../../"
+  enable_telemetry          = var.enable_telemetry
+  availability_zones_filter = true
+  geography_filter          = "United States"
 }
 
-# This local variable is used to filter out regions in the United States that do not have zones.
-locals {
-  us_regions_with_zones = [
-    for v in module.regions.regions_by_geography["United States"] : v if v.zones != null
-  ]
-}
 
 resource "random_shuffle" "two_us_region_names_with_zones" {
-  input        = [for v in local.us_regions_with_zones : v.name]
+  input        = module.regions.valid_region_names
   result_count = 2
 }
 
