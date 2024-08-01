@@ -1,7 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
 # Default example
 
-This example shows how to deploy the module in its simplest configuration.
+This example shows how to deploy the module in its simplest configuration but using live data from Azure.
 
 ```hcl
 terraform {
@@ -10,6 +10,7 @@ terraform {
 
 module "regions" {
   source           = "../../"
+  use_cached_data  = false
   enable_telemetry = var.enable_telemetry
 }
 

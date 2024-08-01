@@ -1,34 +1,29 @@
-# TODO: insert locals here.
 locals {
-  managed_identities = {
-    system_assigned_user_assigned = (var.managed_identities.system_assigned || length(var.managed_identities.user_assigned_resource_ids) > 0) ? {
-      this = {
-        type                       = var.managed_identities.system_assigned && length(var.managed_identities.user_assigned_resource_ids) > 0 ? "SystemAssigned, UserAssigned" : length(var.managed_identities.user_assigned_resource_ids) > 0 ? "UserAssigned" : "SystemAssigned"
-        user_assigned_resource_ids = var.managed_identities.user_assigned_resource_ids
-      }
-    } : {}
-    system_assigned = var.managed_identities.system_assigned ? {
-      this = {
-        type = "SystemAssigned"
-      }
-    } : {}
-    user_assigned = length(var.managed_identities.user_assigned_resource_ids) > 0 ? {
-      this = {
-        type                       = "UserAssigned"
-        user_assigned_resource_ids = var.managed_identities.user_assigned_resource_ids
-      }
-    } : {}
-  }
-  # Private endpoint application security group associations.
-  # We merge the nested maps from private endpoints and application security group associations into a single map.
-  private_endpoint_application_security_group_associations = { for assoc in flatten([
-    for pe_k, pe_v in var.private_endpoints : [
-      for asg_k, asg_v in pe_v.application_security_group_associations : {
-        asg_key         = asg_k
-        pe_key          = pe_k
-        asg_resource_id = asg_v
-      }
+  geo_groups              = distinct([for v in local.regions_recommended_or_not : v.geography_group])
+  geos                    = distinct([for v in local.regions_recommended_or_not : v.geography])
+  locations               = var.use_cached_data ? local.cached_locations_list : local.live_locations_list
+  region_to_zones_map     = { for v in local.zonemappings : v.location => v.zones }
+  regions_by_display_name = { for v in local.regions_recommended_or_not : v.display_name => v }
+  regions_by_geography = {
+    for geo in local.geos : geo => [
+      for v in local.regions_recommended_or_not : v if v.geography == geo
     ]
-  ]) : "${assoc.pe_key}-${assoc.asg_key}" => assoc }
-  role_definition_resource_substring = "/providers/Microsoft.Authorization/roleDefinitions"
+  }
+  regions_by_geography_group = {
+    for geo_group in local.geo_groups : geo_group => [
+      for v in local.regions_recommended_or_not : v if v.geography_group == geo_group
+    ]
+  }
+  regions_by_name = { for v in local.regions_recommended_or_not : v.name => v }
+  regions_data_merged = [
+    for location in local.locations :
+    merge(
+      location,
+      {
+        zones = lookup(local.region_to_zones_map, location.display_name, null)
+      }
+    )
+  ]
+  regions_recommended_or_not = var.recommended_regions_only ? [for v in local.regions_data_merged : v if v.recommended] : local.regions_data_merged
+  zonemappings               = var.use_cached_data ? local.cached_zonemappings_list : local.live_zonemappings_list
 }
