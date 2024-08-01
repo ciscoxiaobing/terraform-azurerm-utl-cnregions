@@ -1,21 +1,32 @@
 <!-- BEGIN_TF_DOCS -->
-# Default example
+# Random region
 
-This example shows how to deploy the module in its simplest configuration.
+This example shows how to select a region at random.
 
 ```hcl
 terraform {
   required_version = "~> 1.6"
-  required_providers {}
+  required_providers {
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.6"
+    }
+  }
 }
 
 module "regions" {
   source           = "../../"
+  use_cached_data  = true
   enable_telemetry = var.enable_telemetry
 }
 
-output "regions" {
-  value = module.regions.regions
+resource "random_integer" "region_index" {
+  max = length(module.regions.regions) - 1
+  min = 0
+}
+
+output "random_region" {
+  value = module.regions.regions[random_integer.region_index.result]
 }
 ```
 
@@ -26,9 +37,13 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.6)
 
+- <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.6)
+
 ## Resources
 
-No resources.
+The following resources are used by this module:
+
+- [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
@@ -53,7 +68,7 @@ Default: `true`
 
 The following outputs are exported:
 
-### <a name="output_regions"></a> [regions](#output\_regions)
+### <a name="output_random_region"></a> [random\_region](#output\_random\_region)
 
 Description: n/a
 
