@@ -12,9 +12,9 @@ permissions:
   id-token: write
 
 jobs:
-  testexamples:
+  terraformtest:
     if: github.event.repository.name != 'terraform-azurerm-avm-template'
-    runs-on: [ self-hosted, 1ES.Pool=terraform-azurerm-avm-template ]
+    runs-on: [ self-hosted, 1ES.Pool=terraform-azurerm-avm-utl-regions ]
     environment: test
     env:
       TF_IN_AUTOMATION: 1
