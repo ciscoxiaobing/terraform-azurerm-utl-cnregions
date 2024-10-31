@@ -1,7 +1,7 @@
 # Implement an anti-coprruption layer to transform the data from the Azure API into a format that is easier to work with in the rest of the module.
 locals {
   live_locations_list = !var.use_cached_data ? [
-    for location in jsondecode(data.azapi_resource_action.locations[0].output).value : {
+    for location in data.azapi_resource_action.locations[0].output.value : {
       display_name       = location.displayName
       geography          = location.metadata.geography
       geography_group    = location.metadata.geographyGroup
