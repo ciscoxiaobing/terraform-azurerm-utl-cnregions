@@ -582,6 +582,37 @@
           "availabilityZoneMappings": [
             {
               "logicalZone": "1",
+              "physicalZone": "newzealandnorth-az1"
+            },
+            {
+              "logicalZone": "2",
+              "physicalZone": "newzealandnorth-az3"
+            },
+            {
+              "logicalZone": "3",
+              "physicalZone": "newzealandnorth-az2"
+            }
+          ],
+          "displayName": "New Zealand North",
+          "id": "/subscriptions/2a8527ca-5340-49aa-8931-ea03669451a0/locations/newzealandnorth",
+          "metadata": {
+            "geography": "New Zealand",
+            "geographyGroup": "Asia Pacific",
+            "latitude": "-36.84853",
+            "longitude": "174.76349",
+            "pairedRegion": [],
+            "physicalLocation": "Auckland",
+            "regionCategory": "Recommended",
+            "regionType": "Physical"
+          },
+          "name": "newzealandnorth",
+          "regionalDisplayName": "(Asia Pacific) New Zealand North",
+          "type": "Region"
+        },
+        {
+          "availabilityZoneMappings": [
+            {
+              "logicalZone": "1",
               "physicalZone": "canadacentral-az1"
             },
             {
@@ -1643,6 +1674,28 @@
           },
           "name": "eastus2euap",
           "regionalDisplayName": "(US) East US 2 EUAP",
+          "type": "Region"
+        },
+        {
+          "displayName": "South Central US STG",
+          "id": "/subscriptions/2a8527ca-5340-49aa-8931-ea03669451a0/locations/southcentralusstg",
+          "metadata": {
+            "geography": "Stage (US)",
+            "geographyGroup": "US",
+            "latitude": "29.4167",
+            "longitude": "-98.5",
+            "pairedRegion": [
+              {
+                "id": "/subscriptions/2a8527ca-5340-49aa-8931-ea03669451a0/locations/eastusstg",
+                "name": "eastusstg"
+              }
+            ],
+            "physicalLocation": "Texas",
+            "regionCategory": "Other",
+            "regionType": "Physical"
+          },
+          "name": "southcentralusstg",
+          "regionalDisplayName": "(US) South Central US STG",
           "type": "Region"
         },
         {
