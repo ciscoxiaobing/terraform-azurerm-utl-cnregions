@@ -32,12 +32,11 @@ jobs:
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
-      - name: generate token
-        uses: tibdex/github-app-token@v2
-        id: generate-token
+      - uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+        id: app-token
         with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
 
       - name: checkout branch
         run: |
@@ -60,6 +59,14 @@ jobs:
           fi
         working-directory: ${{ github.workspace }}
 
+      - name: run pre-commit
+        id: precommit
+        if: env.UPDATED == '1'
+        run: |
+          ./avm pre-commit
+        env:
+
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       - name: commit changes & create PR
         id: pr
         if: env.UPDATED == '1'
@@ -71,7 +78,7 @@ jobs:
             echo pull-request-number=$(gh pr view $PR_URL --json number | jq -r '.number') >> "$GITHUB_OUTPUT"
           fi
         env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: close and comment out of date prs
         if: env.UPDATED == '1'
@@ -79,4 +86,4 @@ jobs:
           PULL_REQUESTS=$(gh pr list --search "feat: update data from Azure" --json number,headRefName)
           echo "$PULL_REQUESTS" | jq -r '.[] | select(.number != ${{ steps.pr.outputs.pull-request-number }}) | .number' | xargs -I {} gh pr close {} --delete-branch --comment "Supersceeded by #${{ steps.pr.outputs.pull-request-number }}"
         env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
