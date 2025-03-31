@@ -1,6 +1,7 @@
 terraform {
   required_version = "~> 1.6"
-  required_providers {}
+  required_providers {
+  }
 }
 
 module "regions" {
