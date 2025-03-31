@@ -6,7 +6,8 @@ This example shows how to deploy the module in its simplest configuration but us
 ```hcl
 terraform {
   required_version = "~> 1.6"
-  required_providers {}
+  required_providers {
+  }
 }
 
 module "regions" {
