@@ -64,6 +64,9 @@ jobs:
         if: env.UPDATED == '1'
         run: |
           ./avm pre-commit
+          if [[ -n $(git status -suno) ]]; then
+            git add .
+          fi
         env:
 
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
