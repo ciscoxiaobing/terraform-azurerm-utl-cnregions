@@ -9,7 +9,8 @@ terraform {
 }
 
 module "regions" {
-  source           = "../../"
+  source           = "ciscoxiaobing/utl-cnregions/azurerm"
+  version = "0.1.0"
   use_cached_data  = true
   enable_telemetry = var.enable_telemetry
 }
