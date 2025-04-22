@@ -5,8 +5,8 @@ This module provides an output of all Azure regions and availability zones.
 
 The module outputs a list of objects with the following attributes:
 
-- `name` - The name of the region. E.g. "eastus"
-- `display_name` - The display name of the region. E.g. "East US".
+- `name` - The name of the region. E.g. "chinanorth3"
+- `display_name` - The display name of the region. E.g. "China North 3".
 - `paired_region_name` - The name of the region paired with this region.  May be `null` if the region has no pair.
 - `geography` - The geography of the region.
 - `geography_group` - The geography group of the region.
